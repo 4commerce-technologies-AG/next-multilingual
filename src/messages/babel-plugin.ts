@@ -20,11 +20,9 @@ const isImportNamespaceSpecifier = BabelTypes.isImportNamespaceSpecifier;
 const isImportSpecifier = BabelTypes.isImportSpecifier;
 
 const isInNextJs = process?.env?.__NEXT_PROCESSED_ENV === 'true';
-const applicationId = process?.env?.nextMultilingualApplicationId;
 
-if (isInNextJs && (applicationId === undefined || !keySegmentRegExp.test(applicationId))) {
-  throw new Error(`you must define your application identifier using \`next-multilingual/config\``);
-}
+// applicationId wil be set by .babelrc plugin options
+let applicationId;
 
 /**
  * Escapes a regular expression string.
@@ -438,6 +436,41 @@ export default function plugin(): PluginObj {
       Program(programNodePath: NodePath<Program>, pluginPass: PluginPass) {
         const messages = new Messages(programNodePath, pluginPass);
 
+        // Get the global applicationId from .babelrc
+        applicationId = pluginPass.opts['applicationId'] || '';
+
+        // Set the application identifier if valid.
+        if (!keySegmentRegExp.test(applicationId)) {
+          throw new Error(
+            `invalid application identifier '${applicationId}'. Application identifiers ${keySegmentRegExpDescription}.`
+          );
+        }
+
+        // Get file extension for translation files
+        const translationFileExt = (pluginPass.opts['fileExt'] === undefined) ? '.properties' : pluginPass.opts['fileExt'];
+
+        // Get automatic keys and properties handling from config
+        const keysFromPath = (typeof pluginPass.opts['keysFromPath'] !== 'boolean') ? false : pluginPass.opts['keysFromPath'];
+
+        // Get log options
+        const showWarnings = (typeof pluginPass.opts['showWarnings'] !== 'boolean') ? true : pluginPass.opts['showWarnings'];
+        const debug = (typeof pluginPass.opts['debug'] !== 'boolean') ? false : pluginPass.opts['debug'];
+
+        // Check if valid file type
+        if (!['.properties', '.yaml', '.yml', '.json'].includes(translationFileExt)) {
+          throw new Error(
+            `invalid file extension. Use .properties, .y(a)ml or .json only.`
+          );
+        }
+
+        // Add configurations to environment variables so that it is available at build time (by Babel), without extra config.
+        process.env.nextMultilingualApplicationId = applicationId;
+        process.env.nextMultilingualTranslationFileExt = translationFileExt;
+        if (keysFromPath) process.env.nextMultilingualOptionKeysFromPath = 'true';
+        if (showWarnings || debug) process.env.nextMultilingualWarnings = 'true';
+        if (debug) process.env.nextMultilingualDebug = 'true';
+
+        // go and loop the sources
         (programNodePath.get('body') as NodePath[]).forEach((bodyNodePath) => {
           hijackTargets.forEach((hijackTarget) => {
             if (isMatchingNamespaceImport(bodyNodePath, hijackTarget)) {

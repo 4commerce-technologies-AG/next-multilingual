@@ -284,62 +284,11 @@ export class Config {
   /**
    * A multilingual configuration handler.
    *
-   * @param applicationId - The unique application identifier that will be used as a messages key prefix.
    * @param locales - The actual desired locales of the multilingual application. The first locale will be the default locale. Only BCP 47 language tags following the `language`-`country` format are accepted.
-   * @param debug - Enable debug mode to see extra information about `next-multilingual`.
    *
    * @throws Error when one of the arguments is invalid.
    */
-  constructor(applicationId: string, locales: string[], ...args) {
-    // Set the application identifier if valid.
-    if (!keySegmentRegExp.test(applicationId)) {
-      throw new Error(
-        `invalid application identifier '${applicationId}'. Application identifiers ${keySegmentRegExpDescription}.`
-      );
-    }
-
-    // test for compatible if options just contains debug boolean or is object or 2 args
-    if ((args.length > 1) || (args.length === 1 && (typeof args[0] !== 'boolean' && typeof args[0] !== 'object'))) {
-      throw new Error(
-        `invalid call of constructor. Use arguments (applicationId, locales, <debug|options>).`
-      );
-    }
-
-    // Get debug from arguments or options
-    const debug = (() => {
-      if (typeof args[0] === 'boolean') {
-        return args[0];
-      } else if (typeof args[0] === 'object' && typeof args[0].debug === 'boolean') {
-        return args[0].debug;
-      }
-      return false;
-    })();
-
-    // Get options from arguments
-    const options = (typeof args[0] === 'object' && args.pop()) || {};
-
-    // Add `applicationId` to environment variables so that it is available at build time (by Babel), without extra config.
-    process.env.nextMultilingualApplicationId = applicationId;
-
-    // Get file extension for translation files
-    const translationFileExt = options.fileExt || '.properties';
-
-    // Check if valid file type
-    if (!['.properties', '.yaml', '.yml', '.json'].includes(translationFileExt)) {
-      throw new Error(
-        `invalid file extension. Use .properties, .y(a)ml or .json only.`
-      );
-    }
-
-    // Add file extension for translation files to environment variables so that it is available at build time (by Babel), without extra config.
-    process.env.nextMultilingualTranslationFileExt = translationFileExt;
-
-    // Get automatic keys and properties handling from config
-    const optionKeysFromPath = (typeof options.keysFromPath === 'boolean' && options.keysFromPath) || false;
-
-    // Add automatic keys and properties handling to environment variables so that it is available at build time (by Babel), without extra config.
-    process.env.nextMultilingualOptionKeysFromPath = optionKeysFromPath;
-
+  constructor(locales: string[]) {
     // Verify if the locale identifiers are using the right format.
     locales.forEach((locale) => {
       if (!isLocale(locale)) {
@@ -375,7 +324,7 @@ export class Config {
       const watch = new CheapWatch({
         dir: process.cwd(),
         filter: ({ path, stats }) =>
-          ((stats as Stats).isFile() && (path as string).includes(translationFileExt)) ||
+          ((stats as Stats).isFile() && (path as string).includes(process.env.nextMultilingualTranslationFileExt)) ||
           ((stats as Stats).isDirectory() &&
             !(path as string).includes('node_modules') &&
             !(path as string).includes('.next')),
@@ -392,8 +341,7 @@ export class Config {
     }
 
     // Check if debug mode was enabled.
-    if (debug) {
-      process.env.nextMultilingualDebug = 'true'; // Set flag on the server to re-use in other modules.
+    if (process.env.nextMultilingualDebug) {
       console.log('==== ROUTES ====');
       console.dir(this.getRoutes(), { depth: null });
       console.log('==== REWRITES ====');
@@ -731,7 +679,6 @@ export class Config {
 /**
  * Returns the Next.js multilingual config.
  *
- * @param applicationId - The unique application identifier that will be used as a messages key prefix.
  * @param locales - The actual desired locales of the multilingual application. The first locale will be the default locale. Only BCP 47 language tags following the `language`-`country` format are accepted.
  * @param options - Next.js configuration options.
  *
@@ -740,7 +687,6 @@ export class Config {
  * @throws Error when one of the arguments is invalid.
  */
 export function getConfig(
-  applicationId: string,
   locales: string[],
   options: NextConfig | ((phase: string, defaultConfig: NextConfig) => void)
 ): NextConfig {
@@ -757,7 +703,7 @@ export function getConfig(
   });
 
   const nextConfig: NextConfig = options ? options : {};
-  const config = new Config(applicationId, locales, options?.debug);
+  const config = new Config(locales);
 
   // Remove debug option if used.
   if (typeof options.debug !== 'undefined') {
