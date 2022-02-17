@@ -215,7 +215,7 @@ export function isPlaceholderValue(value: MixedValue): value is PlaceholderValue
  */
 export function useMessages(): Messages {
   const { locale } = useRouter();
-  return handleMessages(this, 'useMessages', locale);
+  return handleMessages(this, 'useMessages', locale.toLowerCase());
 }
 
 /**
