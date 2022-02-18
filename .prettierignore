@@ -9,7 +9,7 @@ node_modules
 /coverage
 
 # Javascript (compiled) version
-/lib
+/dist
 
 # Next.js
 .next

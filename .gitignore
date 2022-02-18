@@ -5,9 +5,6 @@
 # Node dependencies
 node_modules/
 
-# Compiled Javascript package
-/lib/
-
 # Next.js files
 .next/
 .env.local

@@ -7,7 +7,7 @@
     "jsx": "react-jsx",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "lib/",
+    "outDir": "dist/",
     "strict": false,
     "declaration": true
   },

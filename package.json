@@ -1,41 +1,41 @@
 {
-  "name": "next-multilingual",
+  "name": "next-multilingual-alternate",
   "description": "An opinionated end-to-end solution for Next.js applications that requires multiple languages.",
   "version": "0.10.3",
   "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./lib/index.js",
-    "./config": "./lib/config/index.js",
-    "./link": "./lib/link/index.js",
-    "./link/ssr": "./lib/link/ssr.js",
-    "./head": "./lib/head/index.js",
-    "./head/ssr": "./lib/head/ssr.js",
-    "./messages": "./lib/messages/index.js",
-    "./messages/babel-plugin": "./lib/messages/babel-plugin.js"
+    ".": "./dist/index.js",
+    "./config": "./dist/config/index.js",
+    "./link": "./dist/link/index.js",
+    "./link/ssr": "./dist/link/ssr.js",
+    "./head": "./dist/head/index.js",
+    "./head/ssr": "./dist/head/ssr.js",
+    "./messages": "./dist/messages/index.js",
+    "./messages/babel-plugin": "./dist/messages/babel-plugin.js"
   },
   "typesVersions": {
     "*": {
       "config": [
-        "lib/config/index.d.ts"
+        "dist/config/index.d.ts"
       ],
       "link": [
-        "lib/link/index.d.ts",
-        "lib/link/ssr.d.ts"
+        "dist/link/index.d.ts",
+        "dist/link/ssr.d.ts"
       ],
       "head": [
-        "lib/head/index.d.ts",
-        "lib/head/ssr.d.ts"
+        "dist/head/index.d.ts",
+        "dist/head/ssr.d.ts"
       ],
       "messages": [
-        "lib/messages/index.d.ts",
-        "lib/messages/babel-plugin.d.ts"
+        "dist/messages/index.d.ts",
+        "dist/messages/babel-plugin.d.ts"
       ]
     }
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "keywords": [
     "Next",
@@ -52,10 +52,10 @@
     "ICU",
     "MessageFormat"
   ],
-  "author": "Avansai (https://avansai.com)",
+  "author": "Tom Freudenberg, 4commerce technologies AG",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Avansai/next-multilingual.git"
+    "url": "git+https://github.com/4commerce-technologies-AG/next-multilingual-alternate.git"
   },
   "type": "commonjs",
   "engines": {
@@ -70,7 +70,7 @@
   },
   "scripts": {
     "build_watch": "npm-watch",
-    "build": "rm -Rf ./lib && tsc",
+    "build": "rm -Rf ./dist && tsc",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "lint": "eslint --ext js,jsx,ts,tsx --fix",
     "next-lint": "cd example && next lint",
@@ -131,12 +131,12 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/Avansai/next-multilingual/issues"
+    "url": "https://github.com/4commerce-technologies-AG/next-multilingual-alternate/issues"
   },
-  "homepage": "https://github.com/Avansai/next-multilingual#readme",
+  "homepage": "https://github.com/4commerce-technologies-AG/next-multilingual-alternate#readme",
   "directories": {
     "doc": "docs",
     "example": "example",
-    "lib": "lib"
+    "dist": "dist"
   }
 }
