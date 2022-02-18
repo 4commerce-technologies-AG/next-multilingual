@@ -35,7 +35,7 @@ export function getRewritesIndex(rewrites: Rewrite[]): RewriteIndex {
   // Build localized URL objects.
   rewrites.forEach((rewrite) => {
     if (rewrite.locale !== false) {
-      return; // Only process `next-multilingual` rewrites.
+      return; // Only process `next-multilingual-alternate` rewrites.
     }
     const urlSegments = rewrite.destination.split('/');
     const urlLocale = urlSegments[1];

@@ -22,7 +22,7 @@ const get_localized_url_1 = require("../helpers/get-localized-url");
 const get_rewrites_1 = require("../helpers/get-rewrites");
 // Throw a clear error is this is included by mistake on the client side.
 if (typeof window !== 'undefined') {
-    throw new Error('`next-multilingual/link/ssr` must only be used on the server, please use `next-multilingual/link` instead');
+    throw new Error('`next-multilingual-alternate/link/ssr` must only be used on the server, please use `next-multilingual-alternate/link` instead');
 }
 /**
  * Link is a wrapper around Next.js' `Link` that provides localized URLs.

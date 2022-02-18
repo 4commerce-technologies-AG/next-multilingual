@@ -48,11 +48,11 @@ export type HijackTarget = {
  */
 export const hijackTargets: HijackTarget[] = [
   {
-    module: 'next-multilingual/messages',
+    module: 'next-multilingual-alternate/messages',
     function: 'useMessages',
   },
   {
-    module: 'next-multilingual/messages',
+    module: 'next-multilingual-alternate/messages',
     function: 'getMessages',
   },
 ];

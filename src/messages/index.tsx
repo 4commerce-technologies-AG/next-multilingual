@@ -59,7 +59,7 @@ export function getTitle(messages: Messages, values?: PlaceholderValues): string
 /**
  * Converts a localized message into its "slug format" representation.
  *
- * This is used by `next-multilingual` to build localized URLs and can be re-used for other similar
+ * This is used by `next-multilingual-alternate` to build localized URLs and can be re-used for other similar
  * purposes such as anchor links.
  *
  * The `locale` must always be specified since some languages use ASCII characters for one of their
@@ -245,7 +245,7 @@ export function handleMessages(
 ): Messages {
   if (!babelifiedMessages || !babelifiedMessages.babelified) {
     throw new Error(
-      `${caller}() requires the 'next-multilingual/messages/babel-plugin' Babel plugin`
+      `${caller}() requires the 'next-multilingual-alternate/messages/babel-plugin' Babel plugin`
     );
   }
 

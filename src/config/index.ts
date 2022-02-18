@@ -145,7 +145,7 @@ export function isDynamicRoute(urlPath: string): boolean {
 }
 
 /**
- * Is `next-multilingual` running in debug mode?
+ * Is `next-multilingual-alternate` running in debug mode?
  *
  * The current implementation only works on the server side.
  *
@@ -295,7 +295,7 @@ export class Config {
         throw new Error(
           'invalid locale `' +
             locale +
-            '` . `next-multilingual` only uses locale identifiers following the `language`-`country` format.'
+            '` . `next-multilingual-alternate` only uses locale identifiers following the `language`-`country` format.'
         );
       }
     });
@@ -720,7 +720,7 @@ export function getConfig(
   /* This is required since Next.js 11.1.3-canary.69 until we support ESM. */
   if (nextConfig?.experimental?.esmExternals !== undefined) {
     throw new Error(
-      'the `esmExternals` option is not supported by `next-multilingual` until we support ESM'
+      'the `esmExternals` option is not supported by `next-multilingual-alternate` until we support ESM'
     );
   }
   if (nextConfig.experimental && typeof nextConfig.experimental !== 'object') {
@@ -738,11 +738,11 @@ export function getConfig(
   nextConfig.webpack = (config, { isServer }) => {
     // Overwrite the `link` component for SSR.
     if (isServer) {
-      config.resolve.alias['next-multilingual/link$'] = require.resolve(
-        'next-multilingual/link/ssr'
+      config.resolve.alias['next-multilingual-alternate/link$'] = require.resolve(
+        'next-multilingual-alternate/link/ssr'
       );
-      config.resolve.alias['next-multilingual/head$'] = require.resolve(
-        'next-multilingual/head/ssr'
+      config.resolve.alias['next-multilingual-alternate/head$'] = require.resolve(
+        'next-multilingual-alternate/head/ssr'
       );
     }
     return config;

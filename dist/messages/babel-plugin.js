@@ -51,11 +51,11 @@ function escapeRegExp(regexp) {
  */
 exports.hijackTargets = [
     {
-        module: 'next-multilingual/messages',
+        module: 'next-multilingual-alternate/messages',
         function: 'useMessages',
     },
     {
-        module: 'next-multilingual/messages',
+        module: 'next-multilingual-alternate/messages',
         function: 'getMessages',
     },
 ];

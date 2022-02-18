@@ -73,7 +73,7 @@ export declare function isApiRoute(urlPath: string): boolean;
  */
 export declare function isDynamicRoute(urlPath: string): boolean;
 /**
- * Is `next-multilingual` running in debug mode?
+ * Is `next-multilingual-alternate` running in debug mode?
  *
  * The current implementation only works on the server side.
  *

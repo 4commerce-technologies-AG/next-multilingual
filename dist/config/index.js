@@ -142,7 +142,7 @@ function isDynamicRoute(urlPath) {
 }
 exports.isDynamicRoute = isDynamicRoute;
 /**
- * Is `next-multilingual` running in debug mode?
+ * Is `next-multilingual-alternate` running in debug mode?
  *
  * The current implementation only works on the server side.
  *
@@ -240,7 +240,7 @@ class Config {
             if (!(0, __1.isLocale)(locale)) {
                 throw new Error('invalid locale `' +
                     locale +
-                    '` . `next-multilingual` only uses locale identifiers following the `language`-`country` format.');
+                    '` . `next-multilingual-alternate` only uses locale identifiers following the `language`-`country` format.');
             }
         });
         // Set the actual desired locales of the multilingual application.
@@ -579,7 +579,7 @@ function getConfig(locales, options) {
     };
     /* This is required since Next.js 11.1.3-canary.69 until we support ESM. */
     if (((_a = nextConfig === null || nextConfig === void 0 ? void 0 : nextConfig.experimental) === null || _a === void 0 ? void 0 : _a.esmExternals) !== undefined) {
-        throw new Error('the `esmExternals` option is not supported by `next-multilingual` until we support ESM');
+        throw new Error('the `esmExternals` option is not supported by `next-multilingual-alternate` until we support ESM');
     }
     if (nextConfig.experimental && typeof nextConfig.experimental !== 'object') {
         throw new Error('invalid value for the `experimental` option');
@@ -596,8 +596,8 @@ function getConfig(locales, options) {
     nextConfig.webpack = (config, { isServer }) => {
         // Overwrite the `link` component for SSR.
         if (isServer) {
-            config.resolve.alias['next-multilingual/link$'] = require.resolve('next-multilingual/link/ssr');
-            config.resolve.alias['next-multilingual/head$'] = require.resolve('next-multilingual/head/ssr');
+            config.resolve.alias['next-multilingual-alternate/link$'] = require.resolve('next-multilingual-alternate/link/ssr');
+            config.resolve.alias['next-multilingual-alternate/head$'] = require.resolve('next-multilingual-alternate/head/ssr');
         }
         return config;
     };

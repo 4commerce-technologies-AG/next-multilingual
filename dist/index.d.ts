@@ -86,7 +86,7 @@ export declare function isLocale(locale: string, checkNormalizedCase?: boolean):
 /**
  * Get a normalized locale identifier.
  *
- * `next-multilingual` only uses locale identifiers following the `language`-`country` format. Locale identifiers
+ * `next-multilingual-alternate` only uses locale identifiers following the `language`-`country` format. Locale identifiers
  * are case insensitive and can be lowercase, however it is recommended by ISO 3166 convention that language codes
  * are lowercase and country codes are uppercase.
  *
@@ -106,8 +106,8 @@ export declare type ResolvedLocaleServerSideProps = {
  * Resolve the preferred locale from an HTTP `Accept-Language` header.
  *
  * @param acceptLanguageHeader - The value of an HTTP request `Accept-Language` header.
- * @param actualLocales - The list of actual locales used by `next-multilingual`.
- * @param actualDefaultLocale - The actual default locale used by `next-multilingual`.
+ * @param actualLocales - The list of actual locales used by `next-multilingual-alternate`.
+ * @param actualDefaultLocale - The actual default locale used by `next-multilingual-alternate`.
  *
  * @returns The preferred locale identifier.
  */
@@ -122,7 +122,7 @@ export declare function setCookieLocale(locale: string): void;
  * Get the locale that was saved to the locale cookie.
  *
  * @param serverSidePropsContext - The Next.js server side properties context.
- * @param actualLocales - The list of actual locales used by `next-multilingual`.
+ * @param actualLocales - The list of actual locales used by `next-multilingual-alternate`.
  *
  * @returns The locale that was saved to the locale cookie.
  */
