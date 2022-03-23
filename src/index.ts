@@ -175,7 +175,7 @@ const LOCALE_COOKIE_LIFETIME = process.env.NEXT_PUBLIC_LOCALE_COOKIE_LIFETIME
  */
 export function setCookieLocale(locale: string): void {
   Cookies.set(null, LOCALE_COOKIE_NAME, locale, {
-    maxAge: LOCALE_COOKIE_LIFETIME,
+    ...((LOCALE_COOKIE_LIFETIME !== -1) ? { maxAge: LOCALE_COOKIE_LIFETIME } : null),
     path: '/',
     sameSite: 'lax',
   });
