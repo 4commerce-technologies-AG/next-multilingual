@@ -52,11 +52,6 @@ export class Messages {
    * @returns The formatted message as a string.
    */
   public format(key: string, values?: PlaceholderValues): string {
-    if (!this.messages.length) {
-      // No need to log the error since it was caught when calling `useMessage()`.
-      return '';
-    }
-
     const message = this.messages[this.messagesIndex[key]];
 
     if (message === undefined) {
@@ -80,11 +75,6 @@ export class Messages {
    * @returns The formatted message as a JSX element.
    */
   public formatJsx(key: string, values: MixedValues): JSX.Element {
-    if (!this.messages.length) {
-      // No need to log the error since it was caught when calling `useMessage()`.
-      return <></>;
-    }
-
     const message = this.messages[this.messagesIndex[key]];
 
     if (message === undefined) {
