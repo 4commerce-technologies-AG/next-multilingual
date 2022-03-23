@@ -181,11 +181,7 @@ const LOCALE_COOKIE_LIFETIME = process.env.NEXT_PUBLIC_LOCALE_COOKIE_LIFETIME
  * @param locale - A locale identifier.
  */
 function setCookieLocale(locale) {
-    nookies_1.default.set(null, LOCALE_COOKIE_NAME, locale, {
-        maxAge: LOCALE_COOKIE_LIFETIME,
-        path: '/',
-        sameSite: 'lax',
-    });
+    nookies_1.default.set(null, LOCALE_COOKIE_NAME, locale, Object.assign(Object.assign({}, ((LOCALE_COOKIE_LIFETIME !== -1) ? { maxAge: LOCALE_COOKIE_LIFETIME } : null)), { path: '/', sameSite: 'lax' }));
 }
 exports.setCookieLocale = setCookieLocale;
 /**

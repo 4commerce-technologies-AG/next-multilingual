@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Messages = void 0;
-const jsx_runtime_1 = require("react/jsx-runtime");
 const __1 = require("../");
 const Message_1 = require("./Message");
 /**
@@ -40,10 +39,6 @@ class Messages {
      * @returns The formatted message as a string.
      */
     format(key, values) {
-        if (!this.messages.length) {
-            // No need to log the error since it was caught when calling `useMessage()`.
-            return '';
-        }
         const message = this.messages[this.messagesIndex[key]];
         if (message === undefined) {
             __1.log.warn(`unable to format key with identifier ${(0, __1.highlight)(key)} in ${(0, __1.highlightFilePath)(this.sourceFilePath)} because it was not found in messages file ${(0, __1.highlightFilePath)(this.messagesFilePath)}`);
@@ -60,10 +55,6 @@ class Messages {
      * @returns The formatted message as a JSX element.
      */
     formatJsx(key, values) {
-        if (!this.messages.length) {
-            // No need to log the error since it was caught when calling `useMessage()`.
-            return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}, void 0);
-        }
         const message = this.messages[this.messagesIndex[key]];
         if (message === undefined) {
             __1.log.warn(`unable to format key with identifier ${(0, __1.highlight)(key)} in ${(0, __1.highlightFilePath)(this.sourceFilePath)} because it was not found in messages file ${(0, __1.highlightFilePath)(this.messagesFilePath)}`);
