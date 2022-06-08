@@ -110,7 +110,7 @@ export function slugify(message: string, locale: string): string {
  */
 export function getMessagesFilePath(filesystemPath: string, locale: string): string {
   const pageFileExtension = extname(filesystemPath);
-  const translationFileExt = process.env.nextMultilingualTranslationFileExt;
+  const translationFileExt = process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt;
 
   if (pageFileExtension) {
     // Filesystem path is a file.
@@ -253,7 +253,7 @@ export function handleMessages(
   const sourceBasename = sourceFilePath.split('/').pop();
   const sourceFilename = sourceBasename.split('.').slice(0, -1).join('.');
   const sourceFileDirectoryPath = sourceFilePath.split('/').slice(0, -1).join('/');
-  const translationFileExt = process.env.nextMultilingualTranslationFileExt;
+  const translationFileExt = process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt;
   const messagesFilename = `${sourceFilename}.${normalizeLocale(locale)}${translationFileExt}`;
   const messagesFilePath = sourceFileDirectoryPath.length
     ? `${sourceFileDirectoryPath}/${messagesFilename}`

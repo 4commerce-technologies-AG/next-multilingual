@@ -26,7 +26,7 @@ export type KeyValueObjectCollection = {
  * @returns The "raw" representation of a translation file in a simple "key/value" object.
  */
 export function parsePropertiesFile(filePath: string): KeyValueObject {
-  const translationFileExt = process.env.nextMultilingualTranslationFileExt;
+  const translationFileExt = process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt;
   const fileContent = stripBom(readFileSync(filePath, 'utf8'));
 
   if (fileContent.includes('�')) {

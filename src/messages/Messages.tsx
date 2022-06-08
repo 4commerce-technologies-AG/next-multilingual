@@ -1,3 +1,4 @@
+import React from 'react';
 import { highlight, highlightFilePath, log, normalizeLocale } from '../';
 import { MessagesIndex, MixedValues, PlaceholderValues } from './';
 import { Message } from './Message';
@@ -56,7 +57,7 @@ export class Messages {
 
     if (message === undefined) {
       log.warn(
-        `unable to format key with identifier ${highlight(key)} in ${highlightFilePath(
+        `unable to format key with identifier "${highlight(key)}" in ${highlightFilePath(
           this.sourceFilePath
         )} because it was not found in messages file ${highlightFilePath(this.messagesFilePath)}`
       );
@@ -64,6 +65,34 @@ export class Messages {
     }
 
     return message.format(values);
+  }
+
+  /**
+   * Format a message identified by a key in a local scope and handle line breaks by {\n}.
+   *
+   * @param key - The local scope key identifying the message.
+   * @param values - The values of the message's placeholders (e.g., `{name: 'Joe'}`).
+   *
+   * @returns The formatted message as string or Fragment.
+   */
+  public formatLn(key: string, values?: PlaceholderValues): (string|JSX.Element) {
+    const message = this.format(key, values);
+
+    if (message.match(/<br ?\/>/)) {
+      const lines = message.split(/<br ?\/>/);
+      return (
+        <>
+          {lines.map((line, index) => {
+            if (index + 1 < lines.length) {
+              return (<React.Fragment key={index}>{line}<br/></React.Fragment>);
+            }
+            return line;
+          })}
+        </>
+      );
+    }
+
+    return message;
   }
 
   /**
@@ -79,7 +108,7 @@ export class Messages {
 
     if (message === undefined) {
       log.warn(
-        `unable to format key with identifier ${highlight(key)} in ${highlightFilePath(
+        `unable to format key with identifier "${highlight(key)}" in ${highlightFilePath(
           this.sourceFilePath
         )} because it was not found in messages file ${highlightFilePath(this.messagesFilePath)}`
       );

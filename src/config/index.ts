@@ -152,7 +152,7 @@ export function isDynamicRoute(urlPath: string): boolean {
  * @returns True when running in debug mode, otherwise false.
  */
 export function isInDebugMode(): boolean {
-  if (typeof process !== 'undefined' && process?.env?.nextMultilingualDebug) {
+  if (typeof process !== 'undefined' && process?.env?.NEXT_PUBLIC_nextMultilingualDebug && process?.env?.NODE_ENV !== 'production') {
     return true;
   }
   return false;
@@ -324,7 +324,7 @@ export class Config {
       const watch = new CheapWatch({
         dir: process.cwd(),
         filter: ({ path, stats }) =>
-          ((stats as Stats).isFile() && (path as string).includes(process.env.nextMultilingualTranslationFileExt)) ||
+          ((stats as Stats).isFile() && (path as string).includes(process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt)) ||
           ((stats as Stats).isDirectory() &&
             !(path as string).includes('node_modules') &&
             !(path as string).includes('.next')),
@@ -341,7 +341,7 @@ export class Config {
     }
 
     // Check if debug mode was enabled.
-    if (process.env.nextMultilingualDebug) {
+    if (isInDebugMode()) {
       console.log('==== ROUTES ====');
       console.dir(this.getRoutes(), { depth: null });
       console.log('==== REWRITES ====');

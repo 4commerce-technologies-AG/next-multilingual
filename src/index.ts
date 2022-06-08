@@ -19,7 +19,7 @@ export class log {
    * @param message - The warning message to log.
    */
   static warn(message: string): void {
-    if (process.env.nextMultilingualWarnings && process.env.NODE_ENV !== 'production') {
+    if (process.env.NEXT_PUBLIC_nextMultilingualWarnings && process.env.NODE_ENV !== 'production') {
       nextLog.warn(message);
     }
   }

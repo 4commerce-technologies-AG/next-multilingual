@@ -175,7 +175,7 @@ function getBabelifiedMessages(sourceFilePath: string): string {
   const sourceFilename = parsedSourceFile.name;
   const babelifiedMessages = new BabelifiedMessages(sourceFilePath);
 
-  const translationFileExt = process.env.nextMultilingualTranslationFileExt;
+  const translationFileExt = process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt;
   const fileRegExp = new RegExp(`^${escapeRegExp(sourceFilename)}\.(?<locale>[\\w-]+)\\${translationFileExt}$`);
 
   readdirSync(sourceFileDirectoryPath, { withFileTypes: true }).forEach((directoryEntry) => {
@@ -465,10 +465,10 @@ export default function plugin(): PluginObj {
 
         // Add configurations to environment variables so that it is available at build time (by Babel), without extra config.
         process.env.nextMultilingualApplicationId = applicationId;
-        process.env.nextMultilingualTranslationFileExt = translationFileExt;
+        process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt = translationFileExt;
         if (keysFromPath) process.env.nextMultilingualOptionKeysFromPath = 'true';
-        if (showWarnings || debug) process.env.nextMultilingualWarnings = 'true';
-        if (debug) process.env.nextMultilingualDebug = 'true';
+        if (showWarnings || debug) process.env.NEXT_PUBLIC_nextMultilingualWarnings = 'true';
+        if (debug) process.env.NEXT_PUBLIC_nextMultilingualDebug = 'true';
 
         // go and loop the sources
         (programNodePath.get('body') as NodePath[]).forEach((bodyNodePath) => {
