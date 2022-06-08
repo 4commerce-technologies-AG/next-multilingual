@@ -149,8 +149,8 @@ exports.isDynamicRoute = isDynamicRoute;
  * @returns True when running in debug mode, otherwise false.
  */
 function isInDebugMode() {
-    var _a;
-    if (typeof process !== 'undefined' && ((_a = process === null || process === void 0 ? void 0 : process.env) === null || _a === void 0 ? void 0 : _a.nextMultilingualDebug)) {
+    var _a, _b;
+    if (typeof process !== 'undefined' && ((_a = process === null || process === void 0 ? void 0 : process.env) === null || _a === void 0 ? void 0 : _a.NEXT_PUBLIC_nextMultilingualDebug) && ((_b = process === null || process === void 0 ? void 0 : process.env) === null || _b === void 0 ? void 0 : _b.NODE_ENV) !== 'production') {
         return true;
     }
     return false;
@@ -262,7 +262,7 @@ class Config {
             let routesSnapshot = this.routes;
             const watch = new cheap_watch_1.default({
                 dir: process.cwd(),
-                filter: ({ path, stats }) => (stats.isFile() && path.includes(process.env.nextMultilingualTranslationFileExt)) ||
+                filter: ({ path, stats }) => (stats.isFile() && path.includes(process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt)) ||
                     (stats.isDirectory() &&
                         !path.includes('node_modules') &&
                         !path.includes('.next')),
@@ -276,7 +276,7 @@ class Config {
             });
         }
         // Check if debug mode was enabled.
-        if (process.env.nextMultilingualDebug) {
+        if (isInDebugMode()) {
             console.log('==== ROUTES ====');
             console.dir(this.getRoutes(), { depth: null });
             console.log('==== REWRITES ====');

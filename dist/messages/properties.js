@@ -16,7 +16,7 @@ const __1 = require("../");
  * @returns The "raw" representation of a translation file in a simple "key/value" object.
  */
 function parsePropertiesFile(filePath) {
-    const translationFileExt = process.env.nextMultilingualTranslationFileExt;
+    const translationFileExt = process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt;
     const fileContent = stripBom((0, fs_1.readFileSync)(filePath, 'utf8'));
     if (fileContent.includes('�')) {
         __1.log.warn(`found a garbled character ${(0, __1.highlight)('�')} in ${(0, __1.highlightFilePath)(filePath)} which most likely points to an encoding issue. Please make sure that your file's encoding is UTF-8 compatible.`);

@@ -1,6 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Messages = void 0;
+const jsx_runtime_1 = require("react/jsx-runtime");
+const react_1 = __importDefault(require("react"));
 const __1 = require("../");
 const Message_1 = require("./Message");
 /**
@@ -41,10 +46,31 @@ class Messages {
     format(key, values) {
         const message = this.messages[this.messagesIndex[key]];
         if (message === undefined) {
-            __1.log.warn(`unable to format key with identifier ${(0, __1.highlight)(key)} in ${(0, __1.highlightFilePath)(this.sourceFilePath)} because it was not found in messages file ${(0, __1.highlightFilePath)(this.messagesFilePath)}`);
+            __1.log.warn(`unable to format key with identifier "${(0, __1.highlight)(key)}" in ${(0, __1.highlightFilePath)(this.sourceFilePath)} because it was not found in messages file ${(0, __1.highlightFilePath)(this.messagesFilePath)}`);
             return (new Message_1.Message(this, key, key)).format(values);
         }
         return message.format(values);
+    }
+    /**
+     * Format a message identified by a key in a local scope and handle line breaks by {\n}.
+     *
+     * @param key - The local scope key identifying the message.
+     * @param values - The values of the message's placeholders (e.g., `{name: 'Joe'}`).
+     *
+     * @returns The formatted message as string or Fragment.
+     */
+    formatLn(key, values) {
+        const message = this.format(key, values);
+        if (message.match(/<br ?\/>/)) {
+            const lines = message.split(/<br ?\/>/);
+            return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: lines.map((line, index) => {
+                    if (index + 1 < lines.length) {
+                        return ((0, jsx_runtime_1.jsxs)(react_1.default.Fragment, { children: [line, (0, jsx_runtime_1.jsx)("br", {}, void 0)] }, index));
+                    }
+                    return line;
+                }) }, void 0));
+        }
+        return message;
     }
     /**
      * Format a message identified by a key in a local into a JSX element.
@@ -57,7 +83,7 @@ class Messages {
     formatJsx(key, values) {
         const message = this.messages[this.messagesIndex[key]];
         if (message === undefined) {
-            __1.log.warn(`unable to format key with identifier ${(0, __1.highlight)(key)} in ${(0, __1.highlightFilePath)(this.sourceFilePath)} because it was not found in messages file ${(0, __1.highlightFilePath)(this.messagesFilePath)}`);
+            __1.log.warn(`unable to format key with identifier "${(0, __1.highlight)(key)}" in ${(0, __1.highlightFilePath)(this.sourceFilePath)} because it was not found in messages file ${(0, __1.highlightFilePath)(this.messagesFilePath)}`);
             return (new Message_1.Message(this, key, key)).formatJsx(values);
         }
         return message.formatJsx(values);

@@ -35,6 +35,15 @@ export declare class Messages {
      */
     format(key: string, values?: PlaceholderValues): string;
     /**
+     * Format a message identified by a key in a local scope and handle line breaks by {\n}.
+     *
+     * @param key - The local scope key identifying the message.
+     * @param values - The values of the message's placeholders (e.g., `{name: 'Joe'}`).
+     *
+     * @returns The formatted message as string or Fragment.
+     */
+    formatLn(key: string, values?: PlaceholderValues): (string | JSX.Element);
+    /**
      * Format a message identified by a key in a local into a JSX element.
      *
      * @param key - The local scope key identifying the message.

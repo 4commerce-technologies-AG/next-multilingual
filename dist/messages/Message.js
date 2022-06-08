@@ -50,8 +50,7 @@ class Message {
                     .replace(/&#x7d;/gi, '}');
             }
             catch (error) {
-                __1.log.warn(`unable to format message with key ${(0, __1.highlight)(this.key)} in ${(0, __1.highlightFilePath)(this.parent.messagesFilePath)}: ${error.message}}`);
-                return '';
+                __1.log.warn(`unable to format message with key "${(0, __1.highlight)(this.key)}" in ${(0, __1.highlightFilePath)(this.parent.messagesFilePath)}: ${error.message.replace(/&#x7b;/gi, '{').replace(/&#x7d;/gi, '}')}`);
             }
         }
         return this.message;
@@ -66,7 +65,7 @@ class Message {
     formatJsx(values) {
         const { placeholderValues, jsxValues } = this.splitValuesByType(values);
         if (!Object.keys(jsxValues).length) {
-            __1.log.warn(`unable to format message with key ${(0, __1.highlight)(this.key)} in ${(0, __1.highlightFilePath)(this.parent.messagesFilePath)} since no JSX element was provided`);
+            __1.log.warn(`unable to format message with key "${(0, __1.highlight)(this.key)}" in ${(0, __1.highlightFilePath)(this.parent.messagesFilePath)} since no JSX element was provided`);
             return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}, void 0);
         }
         const formattedMessage = this.format(placeholderValues);
@@ -76,7 +75,7 @@ class Message {
             }
         }
         catch (error) {
-            __1.log.warn(`unable to format message with key ${(0, __1.highlight)(this.key)} in ${(0, __1.highlightFilePath)(this.parent.messagesFilePath)}: ${error.message}`);
+            __1.log.warn(`unable to format message with key "${(0, __1.highlight)(this.key)}" in ${(0, __1.highlightFilePath)(this.parent.messagesFilePath)}: ${error.message}`);
             return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}, void 0);
         }
     }
