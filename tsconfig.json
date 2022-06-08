@@ -7,7 +7,7 @@
     "jsx": "react-jsx",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "lib/",
+    "outDir": "dist/",
     "declaration": true,
     "strict": true,
     "noImplicitThis": false /** required by `useMessages` and `getMessages` **/

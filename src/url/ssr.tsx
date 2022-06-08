@@ -8,7 +8,7 @@ import { Url } from '../types';
 // Throw a clear error is this is included by mistake on the client side.
 if (typeof window !== 'undefined') {
   throw new Error(
-    '`next-multilingual/link/ssr` must only be used on the server, please use `next-multilingual/link` instead'
+    '`next-multilingual-alternate/link/ssr` must only be used on the server, please use `next-multilingual-alternate/link` instead'
   );
 }
 

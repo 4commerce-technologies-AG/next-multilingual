@@ -5,7 +5,7 @@ module.exports = {
     es6: true,
   },
   parserOptions: { ecmaVersion: 8 }, // to enable features such as async/await
-  ignorePatterns: ['node_modules/*', 'lib/*', '.next/*', '!.prettierrc.js'],
+  ignorePatterns: ['node_modules/*', 'dist/*', '.next/*', '!.prettierrc.js'],
   extends: ['eslint:recommended'],
   overrides: [
     // This configuration will apply only to TypeScript files

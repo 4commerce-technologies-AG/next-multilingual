@@ -60,11 +60,10 @@ export class Message {
           .replace(/&#x7d;/gi, '}');
       } catch (error) {
         log.warn(
-          `unable to format message with key ${highlight(this.key)} in ${highlightFilePath(
+          `unable to format message with key "${highlight(this.key)}" in ${highlightFilePath(
             this.parent.messagesFilePath
-          )}: ${(error as Error).message}}`
+          )}: ${(error as Error).message.replace(/&#x7b;/gi, '{').replace(/&#x7d;/gi, '}')}`
         );
-        return '';
       }
     }
 
@@ -83,7 +82,7 @@ export class Message {
 
     if (!Object.keys(jsxValues).length) {
       log.warn(
-        `unable to format message with key ${highlight(this.key)} in ${highlightFilePath(
+        `unable to format message with key "${highlight(this.key)}" in ${highlightFilePath(
           this.parent.messagesFilePath
         )} since no JSX element was provided`
       );
@@ -98,7 +97,7 @@ export class Message {
       }
     } catch (error) {
       log.warn(
-        `unable to format message with key ${highlight(this.key)} in ${highlightFilePath(
+        `unable to format message with key "${highlight(this.key)}" in ${highlightFilePath(
           this.parent.messagesFilePath
         )}: ${(error as Error).message}`
       );

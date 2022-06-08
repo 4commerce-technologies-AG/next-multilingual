@@ -60,7 +60,7 @@ export function getTitle(messages: Messages, values?: PlaceholderValues): string
 /**
  * Converts a localized message into its "slug format" representation.
  *
- * This is used by `next-multilingual` to build localized URLs and can be re-used for other similar
+ * This is used by `next-multilingual-alternate` to build localized URLs and can be re-used for other similar
  * purposes such as anchor links.
  *
  * The `locale` must always be specified when available since some languages use ASCII characters for one of
@@ -114,14 +114,15 @@ export function slugify(message: string, locale?: string): string {
  */
 export function getMessagesFilePath(filesystemPath: string, locale: string): string {
   const pageFileExtension = extname(filesystemPath);
+  const translationFileExt = process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt;
 
   if (pageFileExtension) {
     // Filesystem path is a file.
-    return `${filesystemPath.replace(pageFileExtension, '')}.${normalizeLocale(locale)}.properties`;
+    return `${filesystemPath.replace(pageFileExtension, '')}.${normalizeLocale(locale)}${translationFileExt}`;
   }
 
   // Filesystem path is a directory.
-  return `${filesystemPath}/index.${normalizeLocale(locale)}.properties`;
+  return `${filesystemPath}/index.${normalizeLocale(locale)}${translationFileExt}`;
 }
 
 /**
@@ -218,7 +219,7 @@ export function isPlaceholderValue(value: MixedValue): value is PlaceholderValue
  */
 export function useMessages(): Messages {
   const { locale } = useRouter();
-  return handleMessages(this, 'useMessages', locale);
+  return handleMessages(this, 'useMessages', locale?.toLowerCase());
 }
 
 /**
@@ -252,7 +253,7 @@ export function handleMessages(
 
   if (!babelifiedMessages || !babelifiedMessages.babelified) {
     throw new Error(
-      `${caller}() requires the 'next-multilingual/messages/babel-plugin' Babel plugin`
+      `${caller}() requires the 'next-multilingual-alternate/messages/babel-plugin' Babel plugin`
     );
   }
 
@@ -260,7 +261,8 @@ export function handleMessages(
   const sourceBasename = sourceFilePath.split('/').pop() as string;
   const sourceFilename = sourceBasename.split('.').slice(0, -1).join('.');
   const sourceFileDirectoryPath = sourceFilePath.split('/').slice(0, -1).join('/');
-  const messagesFilename = `${sourceFilename}.${normalizeLocale(locale)}.properties`;
+  const translationFileExt = process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt;
+  const messagesFilename = `${sourceFilename}.${normalizeLocale(locale)}${translationFileExt}`;
   const messagesFilePath = sourceFileDirectoryPath.length
     ? `${sourceFileDirectoryPath}/${messagesFilename}`
     : messagesFilename;

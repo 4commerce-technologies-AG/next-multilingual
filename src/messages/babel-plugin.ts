@@ -21,11 +21,9 @@ const isImportNamespaceSpecifier = BabelTypes.isImportNamespaceSpecifier;
 const isImportSpecifier = BabelTypes.isImportSpecifier;
 
 const isInNextJs = process?.env?.__NEXT_PROCESSED_ENV === 'true';
-const applicationId = process?.env?.nextMultilingualApplicationId as string;
 
-if (isInNextJs && (applicationId === undefined || !keySegmentRegExp.test(applicationId))) {
-  throw new Error(`you must define your application identifier using \`next-multilingual/config\``);
-}
+// applicationId wil be set by .babelrc plugin options
+let applicationId: string;
 
 /**
  * Escapes a regular expression string.
@@ -51,11 +49,11 @@ export type HijackTarget = {
  */
 export const hijackTargets: HijackTarget[] = [
   {
-    module: 'next-multilingual/messages',
+    module: 'next-multilingual-alternate/messages',
     function: 'useMessages',
   },
   {
-    module: 'next-multilingual/messages',
+    module: 'next-multilingual-alternate/messages',
     function: 'getMessages',
   },
 ];
@@ -89,10 +87,12 @@ export class BabelifiedMessages {
  */
 export function getMessages(propertiesFilePath: string): KeyValueObject {
   const keyValueObject = parsePropertiesFile(propertiesFilePath);
+  const optionKeysFromPath = process.env.nextMultilingualOptionKeysFromPath;
+  const contextSegmentFromPath = optionKeysFromPath ? propertiesFilePath.split('.').slice(0,-2).join('.') : '';
   let context: string | undefined;
   const compactedKeyValueObject: KeyValueObject = {};
   for (const key in keyValueObject) {
-    const keySegments = key.split('.');
+    const keySegments = (!optionKeysFromPath) ? key.split('.') : [applicationId, contextSegmentFromPath, key];
     if (keySegments.length !== 3) {
       log.warn(
         `unable to use messages in ${highlightFilePath(
@@ -119,7 +119,7 @@ export function getMessages(propertiesFilePath: string): KeyValueObject {
 
     // Verify the key's context.
     if (context === undefined) {
-      if (!keySegmentRegExp.test(contextSegment)) {
+      if (!optionKeysFromPath && !keySegmentRegExp.test(contextSegment)) {
         log.warn(
           `unable to use messages in ${highlightFilePath(
             propertiesFilePath
@@ -144,7 +144,7 @@ export function getMessages(propertiesFilePath: string): KeyValueObject {
     }
 
     // Verify the key's identifier.
-    if (!keySegmentRegExp.test(idSegment)) {
+    if (!optionKeysFromPath && !keySegmentRegExp.test(idSegment)) {
       log.warn(
         `unable to use messages in ${highlightFilePath(
           propertiesFilePath
@@ -156,7 +156,9 @@ export function getMessages(propertiesFilePath: string): KeyValueObject {
     }
 
     // If validation passes, keep only the identifier part of the key to reduce file sizes.
-    compactedKeyValueObject[idSegment] = keyValueObject[key];
+    const keyValue = keyValueObject[key];
+    // DRY if optionKeysFromPath and key is already message
+    compactedKeyValueObject[idSegment] = (optionKeysFromPath && (keyValue === null || String(keyValue) === '')) ? key : keyValue;
   }
   return compactedKeyValueObject;
 }
@@ -174,7 +176,8 @@ function getBabelifiedMessages(sourceFilePath: string): string {
   const sourceFilename = parsedSourceFile.name;
   const babelifiedMessages = new BabelifiedMessages(sourceFilePath);
 
-  const fileRegExp = new RegExp(`^${escapeRegExp(sourceFilename)}.(?<locale>[\\w-]+).properties$`);
+  const translationFileExt = process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt;
+  const fileRegExp = new RegExp(`^${escapeRegExp(sourceFilename)}\.(?<locale>[\\w-]+)\\${translationFileExt}$`);
 
   readdirSync(sourceFileDirectoryPath, { withFileTypes: true }).forEach((directoryEntry) => {
     if (directoryEntry.isFile()) {
@@ -449,6 +452,41 @@ export default function plugin(): PluginObj {
       Program(programNodePath: NodePath<Program>, pluginPass: PluginPass) {
         const messages = new Messages(programNodePath, pluginPass);
 
+        // Get the global applicationId from .babelrc
+        applicationId = pluginPass.opts['applicationId'] || '';
+
+        // Set the application identifier if valid.
+        if (!keySegmentRegExp.test(applicationId)) {
+          throw new Error(
+            `invalid application identifier '${applicationId}'. Application identifiers ${keySegmentRegExpDescription}.`
+          );
+        }
+
+        // Get file extension for translation files
+        const translationFileExt = (typeof pluginPass.opts['fileExt'] === 'undefined') ? '.properties' : pluginPass.opts['fileExt'];
+
+        // Get automatic keys and properties handling from config
+        const keysFromPath = (typeof pluginPass.opts['keysFromPath'] !== 'boolean') ? false : pluginPass.opts['keysFromPath'];
+
+        // Get log options
+        const showWarnings = (typeof pluginPass.opts['showWarnings'] !== 'boolean') ? true : pluginPass.opts['showWarnings'];
+        const debug = (typeof pluginPass.opts['debug'] !== 'boolean') ? false : pluginPass.opts['debug'];
+
+        // Check if valid file type
+        if (!['.properties', '.yaml', '.yml', '.json'].includes(translationFileExt)) {
+          throw new Error(
+            `invalid file extension. Use .properties, .y(a)ml or .json only.`
+          );
+        }
+
+        // Add configurations to environment variables so that it is available at build time (by Babel), without extra config.
+        process.env.nextMultilingualApplicationId = applicationId;
+        process.env.NEXT_PUBLIC_nextMultilingualTranslationFileExt = translationFileExt;
+        if (keysFromPath) process.env.nextMultilingualOptionKeysFromPath = 'true';
+        if (showWarnings || debug) process.env.NEXT_PUBLIC_nextMultilingualWarnings = 'true';
+        if (debug) process.env.NEXT_PUBLIC_nextMultilingualDebug = 'true';
+
+        // go and loop the sources
         (programNodePath.get('body') as NodePath[]).forEach((bodyNodePath) => {
           hijackTargets.forEach((hijackTarget) => {
             if (isMatchingNamespaceImport(bodyNodePath, hijackTarget)) {

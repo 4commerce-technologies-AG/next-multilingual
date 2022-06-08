@@ -145,14 +145,14 @@ export function isDynamicRoute(urlPath: string): boolean {
 }
 
 /**
- * Is `next-multilingual` running in debug mode?
+ * Is `next-multilingual-alternate` running in debug mode?
  *
  * The current implementation only works on the server side.
  *
  * @returns True when running in debug mode, otherwise false.
  */
 export function isInDebugMode(): boolean {
-  if (typeof process !== 'undefined' && process?.env?.nextMultilingualDebug) {
+  if (typeof process !== 'undefined' && process?.env?.NEXT_PUBLIC_nextMultilingualDebug && process?.env?.NODE_ENV !== 'production') {
     return true;
   }
   return false;
@@ -286,30 +286,18 @@ export class Config {
   /**
    * A multilingual configuration handler.
    *
-   * @param applicationId - The unique application identifier that will be used as a messages key prefix.
    * @param locales - The actual desired locales of the multilingual application. The first locale will be the default locale. Only BCP 47 language tags following the `language`-`country` format are accepted.
-   * @param debug - Enable debug mode to see extra information about `next-multilingual`.
    *
    * @throws Error when one of the arguments is invalid.
    */
-  constructor(applicationId: string, locales: string[], debug = false) {
-    // Set the application identifier if valid.
-    if (!keySegmentRegExp.test(applicationId)) {
-      throw new Error(
-        `invalid application identifier '${applicationId}'. Application identifiers ${keySegmentRegExpDescription}.`
-      );
-    }
-
-    // Add `applicationId` to environment variables so that it is available at build time (by Babel), without extra config.
-    process.env.nextMultilingualApplicationId = applicationId;
-
+  constructor(locales: string[]) {
     // Verify if the locale identifiers are using the right format.
     locales.forEach((locale) => {
       if (!isLocale(locale)) {
         throw new Error(
           'invalid locale `' +
             locale +
-            '` . `next-multilingual` only uses locale identifiers following the `language`-`country` format.'
+            '` . `next-multilingual-alternate` only uses locale identifiers following the `language`-`country` format.'
         );
       }
     });
@@ -337,14 +325,14 @@ export class Config {
 
     this.routes = this.fetchRoutes();
 
-    // During development, add an extra watcher to trigger recompile when a `.properties` file changes.
+    // During development, add an extra watcher to trigger recompile when a translation file changes.
     if (process.env.NODE_ENV === 'development') {
       let routesSnapshot = this.routes;
 
       const watch = new CheapWatch({
         dir: process.cwd(),
         filter: ({ path, stats }: { path: string; stats: Stats }) =>
-          ((stats as Stats).isFile() && (path as string).includes('.properties')) ||
+          ((stats as Stats).isFile() && (path as string).includes(process?.env?.NEXT_PUBLIC_nextMultilingualTranslationFileExt ?? '.properties')) ||
           ((stats as Stats).isDirectory() &&
             !(path as string).includes('node_modules') &&
             !(path as string).includes('.next')),
@@ -361,8 +349,7 @@ export class Config {
     }
 
     // Check if debug mode was enabled.
-    if (debug) {
-      process.env.nextMultilingualDebug = 'true'; // Set flag on the server to re-use in other modules.
+    if (isInDebugMode()) {
       console.log('==== ROUTES ====');
       console.dir(this.getRoutes(), { depth: null });
       console.log('==== REWRITES ====');
@@ -704,7 +691,6 @@ export class Config {
 /**
  * Returns the Next.js multilingual config.
  *
- * @param applicationId - The unique application identifier that will be used as a messages key prefix.
  * @param locales - The actual desired locales of the multilingual application. The first locale will be the default locale. Only BCP 47 language tags following the `language`-`country` format are accepted.
  * @param options - Next.js configuration options.
  *
@@ -713,7 +699,6 @@ export class Config {
  * @throws Error when one of the arguments is invalid.
  */
 export function getConfig(
-  applicationId: string,
   locales: string[],
   options: NextConfig | ((phase: string, defaultConfig: NextConfig) => void)
 ): NextConfig {
@@ -730,7 +715,7 @@ export function getConfig(
   });
 
   const nextConfig: NextConfig = options ? options : {};
-  const config = new Config(applicationId, locales, options?.debug);
+  const config = new Config(locales);
 
   // Remove debug option if used.
   if (typeof options.debug !== 'undefined') {
@@ -752,7 +737,7 @@ export function getConfig(
   if (nextConfig?.experimental?.esmExternals !== undefined) {
     /* This is required since Next.js 11.1.3-canary.69 until we support ESM. */
     throw new Error(
-      'the `esmExternals` option is not supported by `next-multilingual` until we support ESM'
+      'the `esmExternals` option is not supported by `next-multilingual-alternate` until we support ESM'
     );
   }
   if (nextConfig.experimental && typeof nextConfig.experimental !== 'object') {
@@ -770,13 +755,13 @@ export function getConfig(
   nextConfig.webpack = (config, { isServer }) => {
     // Overwrite the `link` component for SSR.
     if (isServer) {
-      config.resolve.alias['next-multilingual/head$'] = require.resolve(
-        'next-multilingual/head/ssr'
+      config.resolve.alias['next-multilingual-alternate/head$'] = require.resolve(
+        'next-multilingual-alternate/head/ssr'
       );
-      config.resolve.alias['next-multilingual/link$'] = require.resolve(
-        'next-multilingual/link/ssr'
+      config.resolve.alias['next-multilingual-alternate/link$'] = require.resolve(
+        'next-multilingual-alternate/link/ssr'
       );
-      config.resolve.alias['next-multilingual/url$'] = require.resolve('next-multilingual/url/ssr');
+      config.resolve.alias['next-multilingual-alternate/url$'] = require.resolve('next-multilingual-alternate/url/ssr');
     }
     return config;
   };

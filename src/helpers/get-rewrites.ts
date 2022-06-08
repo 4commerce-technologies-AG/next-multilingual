@@ -46,7 +46,7 @@ function setEmptyCacheAndShowWarnings(warningMessages: string[]): Rewrite[] {
   log.warn(
     `Exhausted all options to get the ${highlight(
       'rewrites'
-    )} value. Localized URLs will not work when using next-multilingual.`
+    )} value. Localized URLs will not work when using next-multilingual-alternate.`
   );
   return setRewritesCache([]);
 }

@@ -47,7 +47,7 @@ function setEmptyCacheAndShowWarnings(warningMessages: string[]): string {
       'basePath'
     )} value. If you are using a ${highlight(
       'basePath'
-    )}, your application's URLs will not work when using next-multilingual.`
+    )}, your application's URLs will not work when using next-multilingual-alternate.`
   );
   return setBasePathCache('');
 }

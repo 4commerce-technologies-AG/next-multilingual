@@ -1,55 +1,55 @@
 {
-  "name": "next-multilingual",
+  "name": "next-multilingual-alternate",
   "description": "An opinionated end-to-end solution for Next.js applications that requires multiple languages.",
   "version": "0.12.0",
   "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./lib/index.js",
-    "./config": "./lib/config/index.js",
-    "./head": "./lib/head/index.js",
-    "./head/ssr": "./lib/head/ssr.js",
-    "./link": "./lib/link/index.js",
-    "./link/ssr": "./lib/link/ssr.js",
-    "./messages": "./lib/messages/index.js",
-    "./messages/babel-plugin": "./lib/messages/babel-plugin.js",
-    "./url": "./lib/url/index.js",
-    "./url/ssr": "./lib/url/ssr.js"
+    ".": "./dist/index.js",
+    "./config": "./dist/config/index.js",
+    "./head": "./dist/head/index.js",
+    "./head/ssr": "./dist/head/ssr.js",
+    "./link": "./dist/link/index.js",
+    "./link/ssr": "./dist/link/ssr.js",
+    "./messages": "./dist/messages/index.js",
+    "./messages/babel-plugin": "./dist/messages/babel-plugin.js",
+    "./url": "./dist/url/index.js",
+    "./url/ssr": "./dist/url/ssr.js"
   },
   "typesVersions": {
     "*": {
       "config": [
-        "lib/config/index.d.ts"
+        "dist/config/index.d.ts"
       ],
       "head": [
-        "lib/head/index.d.ts"
+        "dist/head/index.d.ts"
       ],
       "head/ssr": [
-        "lib/head/ssr.d.ts"
+        "dist/head/ssr.d.ts"
       ],
       "link": [
-        "lib/link/index.d.ts"
+        "dist/link/index.d.ts"
       ],
       "link/ssr": [
-        "lib/link/ssr.d.ts"
+        "dist/link/ssr.d.ts"
       ],
       "messages": [
-        "lib/messages/index.d.ts"
+        "dist/messages/index.d.ts"
       ],
       "messages/babel-plugin": [
-        "lib/messages/babel-plugin.d.ts"
+        "dist/messages/babel-plugin.d.ts"
       ],
       "url": [
-        "lib/url/index.d.ts"
+        "dist/url/index.d.ts"
       ],
       "url/ssr": [
-        "lib/url/ssr.d.ts"
+        "dist/url/ssr.d.ts"
       ]
     }
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "keywords": [
     "Next",
@@ -66,10 +66,10 @@
     "ICU",
     "MessageFormat"
   ],
-  "author": "Avansai (https://avansai.com)",
+  "author": "Tom Freudenberg, 4commerce technologies AG",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Avansai/next-multilingual.git"
+    "url": "git+https://github.com/4commerce-technologies-AG/next-multilingual-alternate.git"
   },
   "type": "commonjs",
   "engines": {
@@ -84,7 +84,7 @@
   },
   "scripts": {
     "build_watch": "npm-watch",
-    "build": "rm -Rf ./lib && tsc",
+    "build": "rm -Rf ./dist && tsc",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "lint": "eslint --ext js,jsx,ts,tsx --fix",
     "next-lint": "cd example && next lint",
@@ -110,6 +110,7 @@
     "colorette": "^2.0.17",
     "dot-properties": "^1.0.1",
     "intl-messageformat": "^10.0.1",
+    "js-yaml": "^4.1.0",
     "nookies": "^2.5.2",
     "resolve-accept-language": "^1.1.5"
   },
@@ -118,6 +119,7 @@
     "@types/babel__core": "^7.1.19",
     "@types/cookie": "^0.5.1",
     "@types/express": "^4.17.13",
+    "@types/js-yaml": "^4.0.5",
     "@types/node": "^17.0.39",
     "@types/react": "^18.0.11",
     "@types/react-dom": "^18.0.5",
@@ -151,12 +153,12 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/Avansai/next-multilingual/issues"
+    "url": "https://github.com/4commerce-technologies-AG/next-multilingual-alternate/issues"
   },
-  "homepage": "https://github.com/Avansai/next-multilingual#readme",
+  "homepage": "https://github.com/4commerce-technologies-AG/next-multilingual-alternate#readme",
   "directories": {
     "doc": "docs",
     "example": "example",
-    "lib": "lib"
+    "dist": "dist"
   }
 }
