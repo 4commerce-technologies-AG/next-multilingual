@@ -1,6 +1,6 @@
-import { parse as parseProperties } from 'dot-properties';
 import yaml from 'js-yaml';
 import { readFileSync } from 'fs';
+import { propertiesToJson } from 'properties-file/content';
 
 import { highlight, highlightFilePath, log } from '../';
 
@@ -38,7 +38,7 @@ export function parsePropertiesFile(filePath: string): KeyValueObject {
   }
 
   if (translationFileExt === '.properties') {
-    return parseProperties(fileContent) as KeyValueObject;
+    return propertiesToJson(fileContent);
   } else if (translationFileExt === '.json') {
     return JSON.parse(fileContent) as KeyValueObject;
   } else if (['.yaml', '.yml'].includes(translationFileExt)) {
@@ -48,6 +48,7 @@ export function parsePropertiesFile(filePath: string): KeyValueObject {
   log.warn(
     `unknown translation file extension ${translationFileExt} used.`
   );
+
   return {} as KeyValueObject;
 }
 
