@@ -114,6 +114,8 @@
     "resolve-accept-language": "^1.1.12"
   },
   "devDependencies": {
+    "@babel/template": "^7.18.10",
+    "@babel/types": "^7.20.0",
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/babel__core": "^7.1.19",
     "@types/cookie": "^0.5.1",

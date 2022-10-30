@@ -11,6 +11,7 @@
     "outDir": "dist/",
     "declaration": true,
     "strict": true,
+    "noImplicitAny": false,
     "noImplicitThis": false /** required by `useMessages` and `getMessages` **/
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
